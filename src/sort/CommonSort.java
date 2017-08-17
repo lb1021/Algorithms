@@ -1,6 +1,6 @@
 package sort;
 
-abstract class CommonSort implements Sortable {
+public abstract class CommonSort implements Sortable {
 	static boolean less(Comparable a, Comparable b) {
 		return a.compareTo(b) < 0;
 	}
