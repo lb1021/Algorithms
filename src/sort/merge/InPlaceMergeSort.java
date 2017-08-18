@@ -2,9 +2,7 @@ package sort.merge;
 
 
 public class InPlaceMergeSort extends CommonSort {
-	public void sort (Comparable[] a, int lo, int mid, int hi) {
-		
-		Comparable[] auxiliary = new Comparable[a.length];
+	public void merge (Comparable[] a, Comparable[] auxiliary, int lo, int mid, int hi) {
 		
 		for (int k=lo; k<=hi; k++) {
 			auxiliary[k] = a[k];
