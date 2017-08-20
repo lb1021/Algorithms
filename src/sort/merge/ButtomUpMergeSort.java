@@ -6,11 +6,9 @@ public class ButtomUpMergeSort extends InPlaceMergeSort {
 		
 		int n = a.length;
 		
-		Comparable[] auxiliary = new Comparable[n];
-		
 		for (int size=1; size<n; size=size+size) {
 			for (int lo=0; lo<n-size; lo=lo+size+size) {
-				merge(a,auxiliary,lo,lo+size-1,Math.min(lo+size+size-1, n-1));
+				merge(a,lo,lo+size-1,Math.min(lo+size+size-1, n-1));
 			}
 		}
 	}
