@@ -48,12 +48,12 @@ public class Stack<Item> implements Iterable<Item> {
 		
 		@Override
 		public boolean hasNext() {
-			if (!hasNext()) throw new NoSuchElementException();
 			return current != null;
 		}
 
 		@Override
 		public Item next() {
+			if (!hasNext()) throw new NoSuchElementException();
 			Item item = current.item;
 			current = current.next;
 			return item;
