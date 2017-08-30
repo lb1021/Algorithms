@@ -1,4 +1,4 @@
-package sort;
+package sort.priorityqueues;
 
 public class MaxPQLinkedListInsert<Key extends Comparable> {
 	

@@ -1,4 +1,4 @@
-package sort;
+package sort.priorityqueues;
 
 public class MaxPQLinkedListDelete<Key extends Comparable> {
 	
