@@ -82,15 +82,11 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 	
 	private Node min(Node node) {
 		
-		if (node == null) {
-			return null;
-		}
-		
 		if (node.left == null) {
 			return node;
-		} else {
-			return min(node.left);
-		}
+		} 
+		
+		return min(node.left);
 	}
 	
 	public Key floor(Key key) {
@@ -99,9 +95,9 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 		
 		if (x == null) {
 			return null;
-		} else {
-			return x.key;
-		}
+		} 
+
+		return x.key;
 		
 	}
 	
@@ -112,10 +108,12 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 		
 		int cmp = key.compareTo(node.key);
 		
+		if (cmp == 0) {
+			return node;
+		}
+		
 		if (cmp < 0) {
 			return floor(node.left, key);
-		} else if (cmp == 0) {
-			return node;
 		}
 		
 		Node t = floor(node.right, key);
@@ -150,15 +148,7 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 	}
 	
 	public Key select(int k) {
-		
-		Node x = select(root, k);
-		
-		if (x == null) {
-			return null;
-		} else {
-			return x.key;
-		}
-		
+		return select(root, k).key;
 	}
 	
 	private Node select(Node node, int k) {
