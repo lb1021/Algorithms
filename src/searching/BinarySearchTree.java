@@ -166,4 +166,54 @@ public class BinarySearchTree<Key extends Comparable<Key>, Value> {
 			return node;
 		}
 	}
+	
+	public void deleteMin() {
+		root = deleteMin(root);
+	}
+	
+	private Node deleteMin(Node node) {
+		
+		if (node.left == null) {
+			return node.right;
+		}
+		
+		node.left = deleteMin(node.left);
+		node.N = size(node.left)+size(node.right)+1;
+		return node;
+	}
+	
+	public void delete(Key key) {
+		root = delete(root, key);
+	}
+	
+	private Node delete(Node node, Key key) {
+		if (node == null) {
+			return null;
+		}
+		
+		int cmp = key.compareTo(node.key);
+		
+		if (cmp < 0) {
+			node.left = delete(node.left, key);
+		} else if (cmp > 0) {
+			node.right = delete(node.right, key);
+		} else {
+			if (node.left == null) {
+				return node.right;
+			} 
+			if (node.right == null) {
+				return node.left;
+			} 
+
+			Node deleteNode = node;
+			node = min(deleteNode.right);
+			node.right = deleteMin(deleteNode.right);
+			node.left = deleteNode.left;
+			
+		}
+		
+		node.N = size(node.left)+size(node.right)+1;
+		
+		return node;
+	}
 }
