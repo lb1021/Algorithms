@@ -54,6 +54,30 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return h;
 	}
 	
+	public void delete(Key key) {
+		root = delete(root, key);
+		root.color = BLACK;
+	}
+	
+	private Node delete(Node h, Key key) {
+		
+		if (h == null) {
+			return null;
+		}
+		
+		int cmp = key.compareTo(h.key);
+		
+		if (cmp < 0) {
+			
+		} else if (cmp > 0) {
+			
+		} else {
+			
+		}
+		
+		return null;
+	}
+	
 	private Node rotateLeft(Node h) {
 		Node x = h.right;
 		h.right = x.left;
