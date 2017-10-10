@@ -15,7 +15,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		if (x == null) {
 			return 0;
 		}
-		return x.N;
+		return x.size;
 	}
 	
 	public void put(Key key, Value val) {
@@ -50,7 +50,7 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			flipColors(h);
 		}
 		
-		h.N = 1+size(h.left)+size(h.right);
+		h.size = 1+size(h.left)+size(h.right);
 		return h;
 	}
 	
@@ -78,14 +78,53 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return null;
 	}
 	
+	public void deleteMin() {
+		
+		if (!isRed(root.left) && !isRed(root.right)) {
+			root.color = RED;
+		}
+		
+		root = deleteMin(root);
+		if (!isEmpty()) {
+			root.color = BLACK;
+		}
+	}
+	
+	private Node deleteMin(Node h) {
+		if (h.left == null) {
+			return null;
+		}
+		
+		if (!isRed(h.left) && !isRed(h.left.left)) {
+			h = moveRedLeft(h);
+		}
+		
+		h.left = deleteMin(h.left);
+		
+		return balance(h);
+	}
+	
+	private Node moveRedLeft(Node h) {
+		flipColors(h);
+		
+		if (isRed(h.right.left)) {
+			h.right = rotateRight(h.right);
+			h = rotateLeft(h);
+			
+			flipColors(h);
+		}
+		
+		return h;
+	}
+	
 	private Node rotateLeft(Node h) {
 		Node x = h.right;
 		h.right = x.left;
 		x.left = h;
 		x.color = h.color;
 		h.color = RED;
-		x.N = h.N;
-		h.N = size(h.left) + size(h.right) + 1;
+		x.size = h.size;
+		h.size = size(h.left) + size(h.right) + 1;
 		return x;
 	}
 	
@@ -95,39 +134,61 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		x.right = h;
 		x.color = h.color;
 		h.color = RED;
-		x.N = h.N;
-		h.N = size(h.left) + size(h.right) + 1;
+		x.size = h.size;
+		h.size = size(h.left) + size(h.right) + 1;
 		return x;
 	}
 	
 	private void flipColors(Node h) {
-		h.color = RED;
-		h.left.color = BLACK;
-		h.right.color = BLACK;
+		h.color = !h.color;
+		h.left.color = !h.left.color;
+		h.right.color = !h.left.color;
 	}
 	
-	
-	
-	private class Node {
-		Node left;
-		Node right;
-		Key key;
-		Value val;
-		int N;
-		boolean color;
+	private Node balance(Node h) {
 		
-		public Node(Key key, Value val, int N, boolean color) {
-			this.key = key;
-			this.val = val;
-			this.N = N;
-			this.color = color;
+		if (isRed(h.right)) {
+			h = rotateLeft(h);
 		}
+		
+		if (isRed(h.left) && isRed(h.left.left)) {
+			h = rotateRight(h);
+		}
+		
+		if (isRed(h.left) && isRed(h.right)) {
+			flipColors(h);
+		}
+		
+		h.size = size(h.left) + size(h.right) + 1;
+		
+		return h;
 	}
-
+	
 	private boolean isRed(Node x) {
 		if (x == null) {
 			return false;
 		}
 		return x.color == RED;
 	}
+	
+	public boolean isEmpty() {
+		return root == null;
+	}
+	
+	private class Node {
+		Node left;
+		Node right;
+		Key key;
+		Value val;
+		int size;
+		boolean color;
+		
+		public Node(Key key, Value val, int size, boolean color) {
+			this.key = key;
+			this.val = val;
+			this.size = size;
+			this.color = color;
+		}
+	}
+
 }
