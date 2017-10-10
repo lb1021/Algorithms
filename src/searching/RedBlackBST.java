@@ -55,27 +55,54 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 	}
 	
 	public void delete(Key key) {
+		
+		if (!contains(key)) {
+			return ;
+		}
+		
+		if (!isRed(root.left) && !isRed(root.right)) {
+			root.color = RED;
+		}
+		
 		root = delete(root, key);
-		root.color = BLACK;
+		
+		if (!isEmpty()) {
+			root.color = BLACK;
+		}
 	}
 	
 	private Node delete(Node h, Key key) {
 		
-		if (h == null) {
-			return null;
-		}
-		
-		int cmp = key.compareTo(h.key);
-		
-		if (cmp < 0) {
-			
-		} else if (cmp > 0) {
-			
+		if (key.compareTo(h.key) < 0) {
+			if (!isRed(h.left) && !isRed(h.left.left)) {
+				h = moveRedLeft(h);
+			}
+			h.left = delete(h.left, key);
 		} else {
+			if (isRed(h.left)) {
+				h = rotateRight(h);
+			}
 			
+			if (key.compareTo(h.key)==0 && (h.right==null)) {
+				return null;
+			}
+			
+			if (!isRed(h.right) && !isRed(h.right.left)) {
+				h = moveRedRight(h);
+			}
+			
+			if (key.compareTo(h.key) == 0) {
+				Node x = min(h.right);
+				h.key = x.key;
+				h.val = x.val;
+				h.right = deleteMin(h.right);
+			} else {
+				h.right = delete(h.right, key);
+			}
 		}
 		
-		return null;
+		return balance(h);
+		
 	}
 	
 	public void deleteMin() {
@@ -104,6 +131,14 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 		return balance(h);
 	}
 	
+	private Node min(Node h) {
+		if (h.left == null) {
+			return h;
+		}
+		
+		return min(h.left);
+	}
+	
 	private Node moveRedLeft(Node h) {
 		flipColors(h);
 		
@@ -111,6 +146,17 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			h.right = rotateRight(h.right);
 			h = rotateLeft(h);
 			
+			flipColors(h);
+		}
+		
+		return h;
+	}
+	
+	private Node moveRedRight(Node h) {
+		flipColors(h);
+		
+		if (isRed(h.left.left)) {
+			rotateRight(h);
 			flipColors(h);
 		}
 		
@@ -169,6 +215,29 @@ public class RedBlackBST<Key extends Comparable<Key>, Value> {
 			return false;
 		}
 		return x.color == RED;
+	}
+	
+	public boolean contains(Key key) {
+		return get(key) != null;
+	}
+	
+	public Value get(Key key) {
+		return get(root, key);
+	}
+	
+	private Value get(Node h, Key key) {
+		if (h == null) {
+			return null;
+		}
+		
+		int cmp = key.compareTo(h.key);
+		if (cmp < 0) {
+			return get(h.left, key);
+		} else if (cmp > 0) {
+			return get(h.right, key);
+		} else {
+			return h.val;
+		}
 	}
 	
 	public boolean isEmpty() {
