@@ -1,25 +1,50 @@
 package graphs;
 
+import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.In;
-import sun.net.www.content.image.gif;
 
-public abstract class Graph {
+public class Graph {
 
-	public Graph(int v) {
-		// TODO Auto-generated constructor stub
+	private final int V;
+	private int E;
+	private Bag<Integer>[] adj;
+
+	public Graph(int V) {
+		this.V = V;
+		this.E = 0;
+		adj = (Bag<Integer>[]) new Bag[V];
+		for (int v = 0; v < V; v++) {
+			adj[v] = new Bag<Integer>();
+		}
 	}
 
 	public Graph(In in) {
-
+		this(in.readInt());
+		this.E = in.readInt();
+		for (int i = 0; i < E; i++) {
+			int v = in.readInt();
+			int w = in.readInt();
+			addEdge(v, w);
+		}
 	}
 
-	abstract int v();
+	public int V() {
+		return V;
+	}
 
-	abstract int e();
+	public int E() {
+		return E;
+	}
 
-	abstract void addEdge(int v, int w);
+	public void addEdge(int v, int w) {
+		adj[v].add(w);
+		adj[w].add(v);
+		E++;
+	}
 
-	abstract Iterable<Integer> adj(int v);
+	public Iterable<Integer> adj(int v) {
+		return adj[v];
+	}
 
 	public static int degree(Graph G, int v) {
 		int degree = 0;
@@ -35,7 +60,7 @@ public abstract class Graph {
 
 		int max = 0;
 
-		for (int v = 0; v < G.v(); v++) {
+		for (int v = 0; v < G.V(); v++) {
 			if (degree(G, v) > max) {
 				max = degree(G, v);
 			}
@@ -45,13 +70,13 @@ public abstract class Graph {
 	}
 
 	public static int avgDegree(Graph G) {
-		return 2 * G.e() / G.v();
+		return 2 * G.E() / G.V();
 	}
 
 	public static int numberOfSelfLoops(Graph G) {
 		int count = 0;
 
-		for (int v = 0; v < G.v(); v++) {
+		for (int v = 0; v < G.V(); v++) {
 			for (int w : G.adj(v)) {
 				if (w == v) {
 					count++;
@@ -63,9 +88,6 @@ public abstract class Graph {
 	}
 
 	public String toString() {
-
-		int V = v();
-		int E = e();
 
 		String s = V + " vertices," + E + " edges\n";
 		for (int v = 0; v < V; v++) {
