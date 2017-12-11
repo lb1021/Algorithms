@@ -1,5 +1,7 @@
 package strings.stringsorts;
 
+import sort.Insertion;
+
 public class MSD {
 	private static int R = 256;
 	private static final int M = 15;
@@ -22,7 +24,7 @@ public class MSD {
 	public static void sort(String[] a, int lo, int hi, int d) {
 
 		if (hi <= lo + M) {
-			// Insertion.sort(a, lo, hi, d);
+			Insertion.sort(a, lo, hi, d);
 			return;
 		}
 		int[] count = new int[R + 2];
