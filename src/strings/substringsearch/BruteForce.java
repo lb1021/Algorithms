@@ -1,5 +1,7 @@
 package strings.substringsearch;
 
+import sun.tools.jar.resources.jar;
+
 public class BruteForce {
 	public static int search(String pat, String txt) {
 		int M = pat.length();
@@ -16,5 +18,25 @@ public class BruteForce {
 			}
 		}
 		return N;
+	}
+
+	public static int alternateSearch(String pat, String txt) {
+		int j, M = pat.length();
+		int i, N = txt.length();
+
+		for (i = 0, j = 0; i < N && j < M; i++) {
+			if (txt.charAt(i) == pat.charAt(j)) {
+				j++;
+			} else {
+				i -= j;
+				j = 0;
+			}
+		}
+
+		if (j == M) {
+			return i-M;
+		} else {
+			return N;
+		}
 	}
 }
